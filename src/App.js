@@ -7,11 +7,13 @@ import Deshboard from './pages/Deshboard';
 import { Routes, Route, Link } from 'react-router-dom';
 import Navbar from './pages/Navbar';
 import Login from './pages/Login';
+import CreatePhoneBook from './pages/phone/CreatePhoneBook';
 function App() {
 	return (
 		<div className='App'>
 			<Navbar></Navbar>
 			<Routes>
+				<Route path='/PhoneBookCreate' element={<CreatePhoneBook />} />
 				<Route path='/' element={<Deshboard />} />
 				<Route path='/reg' element={<Register />} />
 				<Route path='/login' element={<Login />} />

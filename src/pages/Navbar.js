@@ -17,6 +17,9 @@ const Navbar = () => {
 		<>
 			<div className=' w-full h-20 bg-red-500 px-8 text-white'>
 				<div className=' w-full h-full flex justify-end items-center'>
+					<span className='mx-2 text-2xl'>
+						<Link to='/PhoneBookCreate'>PhoneBookCreate</Link>
+					</span>
 					{!user ? (
 						<span className='mx-2 text-2xl'>
 							<Link to='/reg'>SignUp</Link>
