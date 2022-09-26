@@ -3,34 +3,23 @@ import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { phoneBookCreate, reset } from '../../features/phoneBook/phoneSlice';
-import Spinner from '../Spinner';
+import { phoneBookCreate } from '../../features/phoneBook/phoneSlice';
 const CreatePhoneBook = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const { isLoading, isError, isSuccess, message } = useSelector(state => state.phone);
+	const { addStatus, addError } = useSelector(state => state.phone);
 
 	const { register, handleSubmit } = useForm();
 
-	useEffect(() => {
-		if (isError) {
-			toast.error(message);
-		}
-		if (isSuccess) {
-			// navigate('/');
-			toast.success('Data Inserted ! Yeahoo');
-		}
-
-		dispatch(reset());
-	}, [isError, isSuccess, message, navigate, dispatch]);
-
 	const onSubmit = data => {
-		console.log(data);
 		dispatch(phoneBookCreate(data));
 	};
-
-	if (isLoading) {
-		return <Spinner></Spinner>;
+	if (addStatus === 'fulfilled') {
+		toast.success('Data inserted');
+		navigate('/');
+	}
+	if (addStatus === 'rejected') {
+		toast.error(addError);
 	}
 	return (
 		<div>
