@@ -36,6 +36,16 @@ export const getPhonebook = createAsyncThunk('phone/', async (_, thunkAPI) => {
 		return thunkAPI.rejectWithValue(message);
 	}
 });
+// Delete phonebook
+export const deleteBook = createAsyncThunk('phone/delete', async (_id, thunkAPI) => {
+	try {
+		const response = await axios.delete(BASE_URL + 'phone/delete/' + _id);
+		return response.data;
+	} catch (error) {
+		const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+		return thunkAPI.rejectWithValue(message);
+	}
+});
 
 export const phoneSlice = createSlice({
 	name: 'phone',
@@ -57,7 +67,6 @@ export const phoneSlice = createSlice({
 		[phoneBookCreate.pending]: (state, action) => {
 			return {
 				...state,
-				dataArray: [],
 				addStatus: 'pending',
 				addError: '',
 				getStatus: '',
@@ -85,7 +94,6 @@ export const phoneSlice = createSlice({
 		[phoneBookCreate.rejected]: (state, action) => {
 			return {
 				...state,
-				dataArray: [],
 				addStatus: 'rejected',
 				addError: action.payload,
 				getStatus: '',
@@ -99,7 +107,6 @@ export const phoneSlice = createSlice({
 		[getPhonebook.pending]: (state, action) => {
 			return {
 				...state,
-				dataArray: [],
 				addStatus: '',
 				addError: '',
 				getStatus: 'pending',
@@ -127,7 +134,6 @@ export const phoneSlice = createSlice({
 		[getPhonebook.rejected]: (state, action) => {
 			return {
 				...state,
-				dataArray: [],
 				addStatus: '',
 				addError: '',
 				getStatus: 'rejected',
@@ -136,6 +142,49 @@ export const phoneSlice = createSlice({
 				updateError: '',
 				deleteStatus: '',
 				deleteError: '',
+			};
+		},
+		[deleteBook.pending]: (state, action) => {
+			return {
+				...state,
+				addStatus: '',
+				addError: '',
+				getStatus: '',
+				getError: '',
+				updateStatus: '',
+				updateError: '',
+				deleteStatus: 'pending',
+				deleteError: '',
+			};
+		},
+		[deleteBook.fulfilled]: (state, action) => {
+			const deletePhone = state.dataArray.filter(dataMe => {
+				return dataMe._id !== action.payload._id;
+			});
+			return {
+				...state,
+				dataArray: deletePhone,
+				addStatus: '',
+				addError: '',
+				getStatus: '',
+				getError: '',
+				updateStatus: '',
+				updateError: '',
+				deleteStatus: 'fulfilled',
+				deleteError: '',
+			};
+		},
+		[deleteBook.rejected]: (state, action) => {
+			return {
+				...state,
+				addStatus: '',
+				addError: '',
+				getStatus: '',
+				getError: '',
+				updateStatus: '',
+				updateError: '',
+				deleteStatus: 'rejected',
+				deleteError: action.payload,
 			};
 		},
 	},
