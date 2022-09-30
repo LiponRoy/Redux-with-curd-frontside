@@ -36,6 +36,21 @@ export const getPhonebook = createAsyncThunk('phone/', async (_, thunkAPI) => {
 		return thunkAPI.rejectWithValue(message);
 	}
 });
+// update phonebook
+export const updatePhoneBook = createAsyncThunk('phone/update', async (phoneBook, thunkAPI) => {
+	try {
+		const { _id, name, phoneNumber, location } = phoneBook;
+		const response = await axios.put(BASE_URL + 'phone/update/' + _id, {
+			name,
+			phoneNumber,
+			location,
+		});
+		return response.data;
+	} catch (error) {
+		const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+		return thunkAPI.rejectWithValue(message);
+	}
+});
 // Delete phonebook
 export const deleteBook = createAsyncThunk('phone/delete', async (_id, thunkAPI) => {
 	try {
@@ -140,6 +155,47 @@ export const phoneSlice = createSlice({
 				getError: action.payload,
 				updateStatus: '',
 				updateError: '',
+				deleteStatus: '',
+				deleteError: '',
+			};
+		},
+		[updatePhoneBook.pending]: (state, action) => {
+			return {
+				...state,
+				addStatus: '',
+				addError: '',
+				getStatus: '',
+				getError: '',
+				updateStatus: 'pending',
+				updateError: '',
+				deleteStatus: '',
+				deleteError: '',
+			};
+		},
+		[updatePhoneBook.fulfilled]: (state, action) => {
+			const updateData = state.dataArray.map(dArray => (dArray._id === action.payload._id ? action.payload : dArray));
+			return {
+				...state,
+				dataArray: updateData,
+				addStatus: '',
+				addError: '',
+				getStatus: '',
+				getError: '',
+				updateStatus: 'fulfilled',
+				updateError: '',
+				deleteStatus: '',
+				deleteError: '',
+			};
+		},
+		[updatePhoneBook.rejected]: (state, action) => {
+			return {
+				...state,
+				addStatus: '',
+				addError: '',
+				getStatus: '',
+				getError: '',
+				updateStatus: 'rejected',
+				updateError: 'action.payload',
 				deleteStatus: '',
 				deleteError: '',
 			};

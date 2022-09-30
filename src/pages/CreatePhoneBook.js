@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { phoneBookCreate } from '../features/phoneBook/phoneSlice';
+import { phoneBookCreate, updatePhoneBook } from '../features/phoneBook/phoneSlice';
 
 const CreatePhoneBook = ({ myData, setMyData }) => {
 	const navigate = useNavigate();
@@ -17,8 +17,19 @@ const CreatePhoneBook = ({ myData, setMyData }) => {
 	// };
 	const handleSubmit = e => {
 		e.preventDefault();
-		dispatch(phoneBookCreate(myData));
-		console.log(myData);
+
+		if (myData._id) {
+			// if id already exits then update. because id has only exiting item.
+			dispatch(updatePhoneBook(myData));
+		} else {
+			// if id do not already exits then create. because new item do not hav any id.
+			dispatch(phoneBookCreate(myData));
+		}
+
+		// for reset input velu
+		setMyData({ name: '', phoneNumber: '', location: '' });
+
+		// console.log(myData);
 	};
 	if (addStatus === 'fulfilled') {
 		toast.success('Data inserted');
@@ -29,7 +40,7 @@ const CreatePhoneBook = ({ myData, setMyData }) => {
 	}
 	return (
 		<div>
-			<div className=' h-[90vh] flex flex-col justify-center items-center bg-green-300'>
+			<div className=' h-[90vh] flex flex-col justify-center items-center'>
 				<span className=' text-2xl m-2'>Create Phonebook</span>
 				{/* <form onSubmit={handleSubmit(onSubmit)}>
 					<input className='w-[30rem] h-12 bg-slate-100 my-1 pl-2 rounded-lg border-2 border-cyan-500' placeholder='name' {...register('name', { required: true, maxLength: 50 })} />
@@ -41,14 +52,14 @@ const CreatePhoneBook = ({ myData, setMyData }) => {
 
 					<input className='w-[30rem] h-12 mt-1 pl-2 rounded-lg text-white bg-cyan-600 cursor-pointer' type='submit' />
 				</form> */}
-				<form onSubmit={handleSubmit}>
+				<form onSubmit={handleSubmit} className='fromInput'>
 					<input type='text' placeholder='Enter name' value={myData.name} onChange={e => setMyData({ ...myData, name: e.target.value })} />
 					<br />
 					<input type='text' placeholder='Enter phoneNumber' value={myData.phoneNumber} onChange={e => setMyData({ ...myData, phoneNumber: e.target.value })} />
 					<br />
 					<input type='text' placeholder='Enter location' value={myData.location} onChange={e => setMyData({ ...myData, location: e.target.value })} />
 					<br />
-					<button type='submit'> Add Task</button>
+					<button type='submit'>{myData._id ? 'Update data' : 'Add data'}</button>
 				</form>
 			</div>
 		</div>

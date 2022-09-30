@@ -9,9 +9,9 @@ const Deshboard = () => {
 		location: '',
 	});
 	return (
-		<div className=' container grid grid-cols-1 md:grid-cols-2'>
+		<div className='grid grid-cols-1 md:grid-cols-2'>
+			<ListView setMyData={setMyData}></ListView>
 			<CreatePhoneBook myData={myData} setMyData={setMyData}></CreatePhoneBook>
-			<ListView myData={myData}></ListView>
 		</div>
 	);
 };

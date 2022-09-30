@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { deleteBook, getPhonebook } from '../features/phoneBook/phoneSlice';
 import Spinner from './Spinner';
-const ListView = () => {
+const ListView = ({ setMyData }) => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { user } = useSelector(state => state.auth);
@@ -26,12 +26,18 @@ const ListView = () => {
 		toast.error(addError);
 	}
 
+	// for updating phonebook
+
+	const updatePhoneBookClick = data => {
+		setMyData(data);
+	};
+
 	// for deleting phonebook
 	const deletePhoneBook = _id => {
 		dispatch(deleteBook(_id));
 	};
 	return (
-		<div className=' h-[90vh] flex flex-col justify-center items-center bg-green-500'>
+		<div className=' h-[90vh] flex flex-col justify-center items-center '>
 			<span className=' text-2xl m-2'>{user && user.user.name}</span>
 			<span className=' text-2xl m-2'>{dataArray && dataArray.length} -Phonebook</span>
 
@@ -44,7 +50,9 @@ const ListView = () => {
 							REMOVE
 						</button>
 						<br></br>
-						<button className='btn btn-xs m-2'>Update</button>
+						<button onClick={() => updatePhoneBookClick(data)} className='btn btn-xs m-2'>
+							Update
+						</button>
 						<br></br>
 					</div>
 				))}
