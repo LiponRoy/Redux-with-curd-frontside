@@ -3,34 +3,35 @@ import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { loginMe, reset } from '../features/auth/authSlice';
+import { loginMe } from '../features/auth/authSlice';
 import Spinner from './Spinner';
 
 const Login = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const { user, isLoading, isError, isSuccess, message } = useSelector(state => state.auth);
+	//const { user, isLoading, isError, isSuccess, message } = useSelector(state => state.auth);
+	const { user, loginStatus, loginError } = useSelector((state) => state.auth);
 
 	const { register, handleSubmit } = useForm();
 
 	useEffect(() => {
-		if (isError) {
-			toast.error(message);
+		if (loginStatus === 'rejected') {
+			toast.error(loginError);
 		}
-		if (isSuccess || user) {
+		if (loginStatus === 'fulfilled' || user) {
 			navigate('/');
 			// toast.success('login successful');
 		}
 
-		dispatch(reset());
-	}, [user, isError, isSuccess, message, navigate, dispatch]);
+		//dispatch(reset());
+	}, [user, loginStatus, loginError, navigate, dispatch]);
 
-	const onSubmit = data => {
+	const onSubmit = (data) => {
 		console.log(data);
 		dispatch(loginMe(data));
 	};
 
-	if (isLoading) {
+	if (loginStatus === 'pending') {
 		return <Spinner></Spinner>;
 	}
 

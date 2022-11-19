@@ -7,8 +7,8 @@ import Spinner from './Spinner';
 const ListView = ({ setMyData }) => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const { user } = useSelector(state => state.auth);
-	const { dataArray, addStatus, addError } = useSelector(state => state.phone);
+	const { user } = useSelector((state) => state.auth);
+	const { createStatus, createError, dataArray } = useSelector((state) => state.phone);
 
 	useEffect(() => {
 		if (!user) {
@@ -19,21 +19,21 @@ const ListView = ({ setMyData }) => {
 		}
 	}, [user, dispatch, dataArray]);
 
-	// if (addStatus === 'pending') {
-	// 	return <Spinner></Spinner>;
-	// }
-	if (addError) {
-		toast.error(addError);
+	if (createStatus === 'pending') {
+		return <Spinner></Spinner>;
+	}
+	if (createStatus === 'rejected') {
+		toast.error(createError);
 	}
 
 	// for updating phonebook
 
-	const updatePhoneBookClick = data => {
+	const updatePhoneBookClick = (data) => {
 		setMyData(data);
 	};
 
 	// for deleting phonebook
-	const deletePhoneBook = _id => {
+	const deletePhoneBook = (_id) => {
 		dispatch(deleteBook(_id));
 	};
 	return (

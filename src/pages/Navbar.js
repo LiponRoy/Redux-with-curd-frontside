@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logoutMe, reset } from '../features/auth/authSlice';
+import { logoutMe } from '../features/auth/authSlice';
 const Navbar = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -11,7 +11,7 @@ const Navbar = () => {
 	const onLogout = () => {
 		dispatch(logoutMe());
 		navigate('/reg');
-		dispatch(reset());
+		//dispatch(reset());
 	};
 	return (
 		<>
